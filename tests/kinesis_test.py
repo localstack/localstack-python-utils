@@ -1,7 +1,7 @@
 import time
 import boto3
 import unittest
-from localstack import startup_localstack, stop_localstack
+from localstack_utils import startup_localstack, stop_localstack
 
 class kinesis_test(unittest.TestCase):
         def setUp(self):

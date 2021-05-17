@@ -16,8 +16,7 @@ PORT_CONFIG_FILENAME = "/opt/code/localstack/.venv/lib/python3.8/site-packages/l
 # DEFAULT_PORT_PATTERN = re.compile("'(\\w+)'\\Q: '{proto}://{host}:\\E(\\d+)'")
 
 localstack_instance = None
-LOG = logging.getLogger(__name__);
-
+logging.basicConfig(level=logging.INFO, format='%(message)s')
 
 class Localstack:
     
@@ -61,21 +60,17 @@ class Localstack:
                 raise "Unable to start docker"
 
         except:
-            error = sys.exc_info()
-            print(error)
+            raise sys.exc_info()
+
 
     def stop(self):
-        try:
-            self.localstack_container.stop()
-        except:
-            error = sys.exc_info()
-            print(error)
+        self.localstack_container.stop()
+
     
     def setup_logger(self):
         localstack_logger = LocalstackLogger(self.localstack_container)
         localstack_logger.start()
 
-    # @param services 
 def startup_localstack(port=4566, services=[], ignore_docker_errors = False):
     global localstack_instance
     localstack_instance = Localstack.INSTANCE()
@@ -85,7 +80,6 @@ def startup_localstack(port=4566, services=[], ignore_docker_errors = False):
         config.envirement_variables.update({'SERVICES': ','.join(services)})
     if port != 4566:
         config.port_edge = str(port)
-    
     config.ignore_docker_runerrors = ignore_docker_errors
 
     localstack_instance.startup(config)

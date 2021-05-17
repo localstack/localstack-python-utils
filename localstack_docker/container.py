@@ -20,7 +20,6 @@ LOCALSTACK_EXTERNAL_HOSTNAME = "HOSTNAME_EXTERNAL"
 DEFAULT_CONTAINER_ID = "localstack_main"
 
 DOCKER_CLIENT = docker.from_env()
-LOG = logging.getLogger(__name__);
 
 class Container:
 
@@ -36,7 +35,7 @@ class Container:
         fullPortEdge = {(LOCALSTACK_PORT_EDGE if port_edge == None else port_edge) : (LOCALSTACK_PORT_EDGE)}
 
         if pull_new_image or not image_exists:
-            LOG.info("Pulling latest image")
+            logging.info("Pulling latest image")
             DOCKER_CLIENT.images.pull(image_name_or_default, image_tag)
         
         return DOCKER_CLIENT.containers.run(image_name_or_default, ports=fullPortEdge, environment=environment_variables, detach=True)

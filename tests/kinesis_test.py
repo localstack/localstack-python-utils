@@ -2,6 +2,7 @@ import time
 import boto3
 import unittest
 from localstack import startup_localstack, stop_localstack
+
 class kinesis_test(unittest.TestCase):
         def setUp(self):
             startup_localstack()
@@ -19,7 +20,7 @@ class kinesis_test(unittest.TestCase):
                 endpoint_url='http://localhost:4566')
 
             kinesis.create_stream(StreamName='test', ShardCount=1)
-            time.sleep(10)
+            time.sleep(5)
 
             response = kinesis.list_streams()
             self.assertGreater(len(response.get('StreamNames', [])),0)

@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testsuite name="nosetests" tests="1" errors="0" failures="0" skip="0"><testcase classname="kinesis_test.kinesis_test" name="test_create_stream" time="35.622"><system-out><![CDATA[(<class 'KeyboardInterrupt'>, KeyboardInterrupt(), <traceback object at 0x7fa229b1ae80>)
-]]></system-out></testcase></testsuite>

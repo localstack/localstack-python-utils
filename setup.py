@@ -1,7 +1,16 @@
+import re
 import setuptools
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
+
+install_req = []
+with open('requirements.txt') as f:
+    requirements = f.read()
+
+for line in re.split('\n', requirements):
+    install_req.append(line)
+
 
 setuptools.setup(
     name="localstack-utils",
@@ -25,4 +34,5 @@ setuptools.setup(
     package_dir={"": "localstack_utils"},
     packages=setuptools.find_packages(where="localstack_utils"),
     python_requires=">=3.6",
+    install_requires=install_req
 )

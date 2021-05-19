@@ -2,9 +2,9 @@ import re
 import sys
 import docker
 import logging
-from localstack_docker.container import Container
-from localstack_docker.localstack_docker_configuration import LocalstackDockerConfiguration
-from localstack_docker.localstack_logger import LocalstackLogger
+from localstack_utils.container import Container
+from localstack_utils.localstack_docker_configuration import LocalstackDockerConfiguration
+from localstack_utils.localstack_logger import LocalstackLogger
 
 ENV_CONFIG_USE_SSL = "USE_SSL"
 ENV_CONFIG_EDGE_PORT = "EDGE_PORT"

@@ -1,21 +1,31 @@
+VENV_BIN ?= python3 -m venv
 VENV_DIR ?= .venv
-TEST_PATH ?= ./tests
-PIP_CMD ?= pip
-NOSE_LOG_LEVEL ?= WARNING
+PIP_CMD ?= pip3
 
 ifeq ($(OS), Windows_NT)
-	VENV_RUN = . $(VENV_DIR)/Scripts/activate
+	VENV_ACTIVATE = $(VENV_DIR)/Scripts/activate
 else
-	VENV_RUN = . $(VENV_DIR)/bin/activate
+	VENV_ACTIVATE = $(VENV_DIR)/bin/activate
 endif
 
-setup-venv:
-	(test `which virtualenv` || $(PIP_CMD) install --user virtualenv) && \
-		(test -e $(VENV_DIR) || virtualenv $(VENV_OPTS) $(VENV_DIR))
+VENV_RUN = . $(VENV_ACTIVATE)
 
-install-venv:
-	make setup-venv && \
-		test ! -e requirements.txt || ($(VENV_RUN); $(PIP_CMD) -q install -r requirements.txt)
+$(VENV_ACTIVATE): setup.py setup.cfg
+	test -d $(VENV_DIR) || $(VENV_BIN) $(VENV_DIR)
+	$(VENV_RUN); $(PIP_CMD) install --upgrade pip setuptools wheel plux
+	touch $(VENV_ACTIVATE)
 
-test:
-	($(VENV_RUN); DEBUG=$(DEBUG) PYTHONPATH=`pwd` nosetests $(NOSE_ARGS) --with-timer --logging-level=$(NOSE_LOG_LEVEL) --nocapture --no-skip --exe --cover-erase --cover-tests --cover-inclusive --cover-package=localstack --with-xunit --exclude='$(VENV_DIR).*' --ignore-files='lambda_python3.py' $(TEST_PATH))
+venv: $(VENV_ACTIVATE)
+
+format: venv           		  ## Run ruff and black to format the whole codebase
+	($(VENV_RUN); python -m ruff check --show-source --fix .; python -m black .)
+
+lint: venv      		  ## Run code linter to check code style and check if formatter would make changes
+	($(VENV_RUN); python -m ruff check --show-source . && python -m black --check .)
+
+install: venv
+	$(VENV_RUN); $(PIP_CMD) install -e .
+
+test: venv              	  ## Run tests
+	($(VENV_RUN); python -m pytest -v --cov=plux --cov-report=term-missing --cov-report=xml tests)
+

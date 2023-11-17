@@ -5,9 +5,9 @@ class LocalstackDockerConfiguration:
     image_tag = None
     platform = None
 
-    port_edge = '4566'
-    port_elastic_search = '4571'
-    external_hostname = 'localhost'
+    port_edge = "4566"
+    port_elastic_search = "4571"
+    external_hostname = "localhost"
     environment_variables = {}
     port_mappings = {}
     bind_mounts = {}

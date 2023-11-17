@@ -10,11 +10,6 @@ endif
 
 VENV_RUN = . $(VENV_ACTIVATE)
 
-$(VENV_ACTIVATE): setup.py setup.cfg
-	test -d $(VENV_DIR) || $(VENV_BIN) $(VENV_DIR)
-	$(VENV_RUN); $(PIP_CMD) install --upgrade pip setuptools wheel plux
-	touch $(VENV_ACTIVATE)
-
 venv: $(VENV_ACTIVATE)
 
 format: venv           		  ## Run ruff and black to format the whole codebase

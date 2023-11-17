@@ -23,11 +23,12 @@ DOCKER_CLIENT = docker.from_env()
 class Container:
     @staticmethod
     def create_localstack_container(
-        pull_new_image,
-        image_name,
-        image_tag,
-        gateway_listen,
-        environment_variables,
+        pull_new_image: bool,
+        image_name: str,
+        image_tag: str,
+        gateway_listen: str,
+        environment_variables: dict,
+        bind_ports: dict,
     ):
         environment_variables = environment_variables or {}
         environment_variables["GATEWAY_LISTEN"] = gateway_listen
@@ -39,8 +40,9 @@ class Container:
             else False
         )
 
-        port = gateway_listen.split(":")[1]
-        full_port_edge = {port: port}
+        bind_ports = bind_ports or {}
+        gateway_port = gateway_listen.split(":")[1]
+        bind_ports.update({gateway_port: gateway_port})
 
         if pull_new_image or not image_exists:
             logging.info("Pulling latest image")
@@ -48,7 +50,7 @@ class Container:
 
         return DOCKER_CLIENT.containers.run(
             image_name_or_default,
-            ports=full_port_edge,
+            ports=bind_ports,
             environment=environment_variables,
             detach=True,
         )

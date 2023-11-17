@@ -3,3 +3,4 @@
 nosetests.xml
 __pycache__
 localstack_utils.egg-info
+.ruff_cache

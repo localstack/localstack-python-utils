@@ -5,8 +5,6 @@ from time import sleep
 
 LOCALSTACK_NAME = "localstack/localstack"
 LOCALSTACK_TAG = "latest"
-LOCALSTACK_PORT_EDGE = "4566"
-LOCALSTACK_PORT_ELASTICSEARCH = "4571"
 
 MAX_PORT_CONNECTION_ATTEMPTS = 10
 MAX_LOG_COLLECTION_ATTEMPTS = 120
@@ -17,7 +15,7 @@ ENV_DEBUG = "DEBUG"
 ENV_USE_SSL = "USE_SSL"
 ENV_DEBUG_DEFAULT = "1"
 LOCALSTACK_EXTERNAL_HOSTNAME = "HOSTNAME_EXTERNAL"
-DEFAULT_CONTAINER_ID = "localstack_main"
+DEFAULT_CONTAINER_ID = "localstack-main"
 
 DOCKER_CLIENT = docker.from_env()
 
@@ -25,23 +23,15 @@ DOCKER_CLIENT = docker.from_env()
 class Container:
     @staticmethod
     def create_localstack_container(
-        external_hostname,
         pull_new_image,
-        randomize_ports,
         image_name,
         image_tag,
-        port_edge,
-        port_elasticsearch,
+        gateway_listen,
         environment_variables,
-        port_mappings,
-        bind_mounts,
-        platform,
     ):
-        environment_variables = (
-            {} if environment_variables is None else environment_variables
-        )
-        bind_mounts = {} if bind_mounts is None else bind_mounts
-        port_mappings = {} if port_mappings is None else port_mappings
+        environment_variables = environment_variables or {}
+        environment_variables["GATEWAY_LISTEN"] = gateway_listen
+
         image_name_or_default = LOCALSTACK_NAME if image_name is None else image_name
         image_exists = (
             True
@@ -49,11 +39,8 @@ class Container:
             else False
         )
 
-        fullPortEdge = {
-            (LOCALSTACK_PORT_EDGE if port_edge is None else port_edge): (
-                LOCALSTACK_PORT_EDGE
-            )
-        }
+        port = gateway_listen.split(":")[1]
+        full_port_edge = {port: port}
 
         if pull_new_image or not image_exists:
             logging.info("Pulling latest image")
@@ -61,14 +48,14 @@ class Container:
 
         return DOCKER_CLIENT.containers.run(
             image_name_or_default,
-            ports=fullPortEdge,
+            ports=full_port_edge,
             environment=environment_variables,
             detach=True,
         )
 
     @staticmethod
-    def waitForReady(container, pattern):
-        attemps = 0
+    def wait_for_ready(container, pattern):
+        attempts = 0
 
         while True:
             logs = container.logs(tail=NUM_LOG_LINES).decode("utf-8")
@@ -76,7 +63,7 @@ class Container:
                 return
 
             sleep(POLL_INTERVAL)
-            attemps += 1
+            attempts += 1
 
-            if attemps >= MAX_LOG_COLLECTION_ATTEMPTS:
+            if attempts >= MAX_LOG_COLLECTION_ATTEMPTS:
                 raise "Could not find token: " + pattern.toString() + "in logs"

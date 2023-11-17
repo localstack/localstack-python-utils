@@ -13,3 +13,4 @@ class LocalstackDockerConfiguration:
     initialization_token = None
     use_dingle_docker_container = False
     ignore_docker_runerrors = False
+    pro = False

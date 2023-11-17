@@ -38,26 +38,21 @@ class Localstack:
         if self.locked:
             raise Exception("A docker instance is starting or already started.")
         self.locked = True
-        self.external_hostname = docker_configuration.external_hostname
 
         try:
             self.localstack_container = Container.create_localstack_container(
-                docker_configuration.external_hostname,
                 docker_configuration.pull_new_image,
-                docker_configuration.randomize_ports,
                 docker_configuration.image_name,
                 docker_configuration.image_tag,
-                docker_configuration.port_edge,
-                docker_configuration.port_elastic_search,
+                docker_configuration.gateway_listen,
                 docker_configuration.environment_variables,
                 docker_configuration.port_mappings,
-                docker_configuration.bind_mounts,
-                docker_configuration.platform,
+                docker_configuration.pro,
             )
 
             self.setup_logger()
 
-            Container.waitForReady(self.localstack_container, READY_TOKEN)
+            Container.wait_for_ready(self.localstack_container, READY_TOKEN)
 
         except docker.errors.APIError:
             if not docker_configuration.ignore_docker_runerrors:
@@ -74,16 +69,37 @@ class Localstack:
         localstack_logger.start()
 
 
-def startup_localstack(port=4566, services=[], ignore_docker_errors=False):
+def startup_localstack(
+    image_name="",
+    tag="",
+    pro=False,
+    ports=None,
+    env_variables=None,
+    gateway_listen="",
+    ignore_docker_errors=False,
+):
     global localstack_instance
     localstack_instance = Localstack.INSTANCE()
     config = LocalstackDockerConfiguration()
 
-    if len(services):
-        config.envirement_variables.update({"SERVICES": ",".join(services)})
-    if port != 4566:
-        config.port_edge = str(port)
     config.ignore_docker_runerrors = ignore_docker_errors
+    if image_name:
+        config.image_name = image_name
+
+    if tag:
+        config.image_tag = tag
+
+    if ports:
+        config.port_mappings = ports
+
+    if pro:
+        config.pro = pro
+
+    if env_variables:
+        config.environment_variables = env_variables
+
+    if gateway_listen:
+        config.gateway_listen = gateway_listen
 
     localstack_instance.startup(config)
 

@@ -1,7 +1,7 @@
 import time
 import boto3
 import unittest
-from localstack_utils import startup_localstack, stop_localstack
+from localstack_utils.localstack import startup_localstack, stop_localstack
 
 
 class TestKinesis(unittest.TestCase):
@@ -21,7 +21,7 @@ class TestKinesis(unittest.TestCase):
         )
 
         kinesis.create_stream(StreamName="test", ShardCount=1)
-        time.sleep(5)
+        time.sleep(1)
 
         response = kinesis.list_streams()
         self.assertGreater(len(response.get("StreamNames", [])), 0)

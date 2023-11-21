@@ -5,9 +5,7 @@ class LocalstackDockerConfiguration:
     image_tag = None
     platform = None
 
-    port_edge = '4566'
-    port_elastic_search = '4571'
-    external_hostname = 'localhost'
+    gateway_listen = "0.0.0.0:4566"
     environment_variables = {}
     port_mappings = {}
     bind_mounts = {}
@@ -15,3 +13,4 @@ class LocalstackDockerConfiguration:
     initialization_token = None
     use_dingle_docker_container = False
     ignore_docker_runerrors = False
+    pro = False

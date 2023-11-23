@@ -1,4 +1,4 @@
-# LOCALSTACK-UTILS
+# LocalStack Utils
 This Python utility streamlines the integration of Localstack, a local AWS cloud services mock, with unit tests. Seamlessly incorporate Localstack into your Python projects to facilitate efficient and reliable testing of AWS interactions within a controlled local environment. Enhance the development process by utilizing this utility to simulate AWS services during unit testing, ensuring robust and dependable code before deployment.
 
 ### Prerequisites

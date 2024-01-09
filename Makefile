@@ -10,7 +10,9 @@ endif
 
 VENV_RUN = . $(VENV_ACTIVATE)
 
-venv: $(VENV_ACTIVATE)
+venv:
+	test -d $(VENV_DIR) || $(VENV_BIN) $(VENV_DIR)
+	($(VENV_RUN); $(PIP_CMD) install --upgrade pip; $(PIP_CMD) install -e .)
 
 format: venv           		  ## Run ruff and black to format the whole codebase
 	($(VENV_RUN); python -m ruff check --show-source --fix .; python -m black .)
@@ -19,7 +21,7 @@ lint: venv      		  ## Run code linter to check code style and check if formatte
 	($(VENV_RUN); python -m ruff check --show-source . && python -m black --check .)
 
 install: venv
-	$(VENV_RUN); $(PIP_CMD) install -e .
+	$(VENV_RUN); $(PIP_CMD) install -e
 
 test: venv              	  ## Run tests
 	($(VENV_RUN); python -m pytest -v --cov=plux --cov-report=term-missing --cov-report=xml tests)

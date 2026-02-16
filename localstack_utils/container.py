@@ -3,8 +3,7 @@ import re
 import docker
 from time import sleep
 
-LOCALSTACK_COMMUNITY_IMAGE_NAME = "localstack/localstack"
-LOCALSTACK_PRO_IMAGE_NAME = "localstack/localstack-pro"
+LOCALSTACK_IMAGE_NAME = "localstack/localstack-pro"
 LATEST_TAG = "latest"
 
 MAX_PORT_CONNECTION_ATTEMPTS = 10
@@ -30,14 +29,11 @@ class Container:
         gateway_listen: str = "0.0.0.0:4566",
         environment_variables: dict = None,
         bind_ports: dict = None,
-        pro: bool = False,
     ):
         environment_variables = environment_variables or {}
         environment_variables["GATEWAY_LISTEN"] = gateway_listen
 
-        image_name_or_default = image_name or (
-            LOCALSTACK_PRO_IMAGE_NAME if pro else LOCALSTACK_COMMUNITY_IMAGE_NAME
-        )
+        image_name_or_default = image_name or LOCALSTACK_IMAGE_NAME
         image_exists = (
             True
             if len(DOCKER_CLIENT.images.list(name=image_name_or_default))

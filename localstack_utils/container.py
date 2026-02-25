@@ -28,6 +28,7 @@ class Container:
         image_name: str = LOCALSTACK_IMAGE_NAME,
         image_tag: str = LATEST_TAG,
         gateway_listen: str = "0.0.0.0:4566",
+        auto_remove: bool = False,
         environment_variables: dict | None = None,
         bind_ports: dict | None = None,
         **kwargs,
@@ -51,6 +52,7 @@ class Container:
             image_name,
             ports=bind_ports,
             environment=environment_variables,
+            auto_remove=auto_remove,
             detach=True,
         )
 

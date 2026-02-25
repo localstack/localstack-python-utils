@@ -6,7 +6,7 @@ from localstack_utils.localstack import startup_localstack, stop_localstack
 
 class TestKinesis(unittest.TestCase):
     def setUp(self):
-        startup_localstack()
+        startup_localstack(image_name="localstack/localstack")
 
     def tearDown(self):
         stop_localstack()

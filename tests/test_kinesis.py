@@ -16,6 +16,7 @@ class TestKinesis(unittest.TestCase):
         kinesis = boto3.client(
             service_name="kinesis",
             aws_access_key_id="test",
+            region_name="us-east-1",
             aws_secret_access_key="test",
             endpoint_url="http://localhost:4566",
         )

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 import re
 import docker
@@ -69,4 +71,4 @@ class Container:
             attempts += 1
 
             if attempts >= MAX_LOG_COLLECTION_ATTEMPTS:
-                raise "Could not find token: " + pattern.toString() + "in logs"
+                raise RuntimeError(f"Could not find token: {pattern.pattern} in logs")

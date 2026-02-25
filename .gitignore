@@ -5,3 +5,4 @@ __pycache__
 localstack_utils.egg-info
 .ruff_cache
 dist
+*.env

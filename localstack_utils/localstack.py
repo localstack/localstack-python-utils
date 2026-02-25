@@ -1,5 +1,4 @@
 import re
-import sys
 import docker
 import logging
 from localstack_utils.container import Container
@@ -41,14 +40,13 @@ class Localstack:
 
         try:
             self.localstack_container = Container.create_localstack_container(
-                docker_configuration.pull_new_image,
-                docker_configuration.image_name,
-                docker_configuration.image_tag,
-                docker_configuration.gateway_listen,
-                docker_configuration.environment_variables,
-                docker_configuration.port_mappings,
-                docker_configuration.pro,
-                docker_configuration.auto_remove_container,
+                pull_new_image=docker_configuration.pull_new_image,
+                image_name=docker_configuration.image_name,
+                image_tag=docker_configuration.image_tag,
+                gateway_listen=docker_configuration.gateway_listen,
+                auto_remove=docker_configuration.auto_remove_container,
+                environment_variables=docker_configuration.environment_variables,
+                bind_ports=docker_configuration.port_mappings,
             )
 
             self.setup_logger()
@@ -57,10 +55,10 @@ class Localstack:
 
         except docker.errors.APIError:
             if not docker_configuration.ignore_docker_runerrors:
-                raise "Unable to start docker"
+                raise RuntimeError("Unable to start docker")
 
         except Exception:
-            raise sys.exc_info()
+            raise
 
     def stop(self):
         self.localstack_container.stop()

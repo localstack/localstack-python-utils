@@ -6,7 +6,7 @@ from localstack_utils.localstack import startup_localstack, stop_localstack
 
 class TestKinesis(unittest.TestCase):
     def setUp(self):
-        startup_localstack()
+        startup_localstack(image_name="localstack/localstack")
 
     def tearDown(self):
         stop_localstack()
@@ -16,6 +16,7 @@ class TestKinesis(unittest.TestCase):
         kinesis = boto3.client(
             service_name="kinesis",
             aws_access_key_id="test",
+            region_name="us-east-1",
             aws_secret_access_key="test",
             endpoint_url="http://localhost:4566",
         )

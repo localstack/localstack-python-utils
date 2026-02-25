@@ -43,6 +43,7 @@ class TestKinesis(unittest.TestCase):
 ```
 
 ## Change Log
+* 1.0.3: Add auto_remove config option
 * 1.0.2: LocalStack Pro image set as default
 * 1.0.1: Repository URL fixed
 * 1.0.0: Initial version

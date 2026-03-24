@@ -3,6 +3,7 @@ class LocalstackDockerConfiguration:
     randomize_ports = False
     image_name = None
     image_tag = None
+    container_name = None
     platform = None
 
     gateway_listen = "0.0.0.0:4566"

@@ -29,6 +29,7 @@ class Container:
         pull_new_image: bool = False,
         image_name: str = LOCALSTACK_IMAGE_NAME,
         image_tag: str = LATEST_TAG,
+        container_name: str = DEFAULT_CONTAINER_ID,
         gateway_listen: str = "0.0.0.0:4566",
         auto_remove: bool = False,
         environment_variables: dict | None = None,
@@ -52,6 +53,7 @@ class Container:
 
         return DOCKER_CLIENT.containers.run(
             image_name,
+            name=container_name,
             ports=bind_ports,
             environment=environment_variables,
             auto_remove=auto_remove,

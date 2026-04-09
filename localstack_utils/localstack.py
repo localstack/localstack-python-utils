@@ -43,6 +43,7 @@ class Localstack:
                 pull_new_image=docker_configuration.pull_new_image,
                 image_name=docker_configuration.image_name,
                 image_tag=docker_configuration.image_tag,
+                container_name=docker_configuration.container_name,
                 gateway_listen=docker_configuration.gateway_listen,
                 auto_remove=docker_configuration.auto_remove_container,
                 environment_variables=docker_configuration.environment_variables,
@@ -71,6 +72,7 @@ class Localstack:
 def startup_localstack(
     image_name="",
     tag="",
+    container_name="",
     pro=False,
     ports=None,
     env_variables=None,
@@ -88,6 +90,9 @@ def startup_localstack(
 
     if tag:
         config.image_tag = tag
+
+    if container_name:
+        config.container_name = container_name
 
     if ports:
         config.port_mappings = ports

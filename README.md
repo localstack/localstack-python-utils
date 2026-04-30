@@ -43,6 +43,7 @@ class TestKinesis(unittest.TestCase):
 ```
 
 ## Change Log
+* 1.0.5: Add support for configurable container name and auth token forwarding
 * 1.0.4: Fixes to LocalStack and Container modules
 * 1.0.3: Add auto_remove config option
 * 1.0.2: LocalStack Pro image set as default

@@ -39,8 +39,12 @@ class Container:
     ):
         environment_variables = environment_variables or {}
         environment_variables["GATEWAY_LISTEN"] = gateway_listen
-        if "LOCALSTACK_AUTH_TOKEN" not in environment_variables and os.environ.get("LOCALSTACK_AUTH_TOKEN"):
-            environment_variables["LOCALSTACK_AUTH_TOKEN"] = os.environ["LOCALSTACK_AUTH_TOKEN"]
+        if "LOCALSTACK_AUTH_TOKEN" not in environment_variables and os.environ.get(
+            "LOCALSTACK_AUTH_TOKEN"
+        ):
+            environment_variables["LOCALSTACK_AUTH_TOKEN"] = os.environ[
+                "LOCALSTACK_AUTH_TOKEN"
+            ]
 
         image_exists = (
             True if len(DOCKER_CLIENT.images.list(name=image_name)) else False

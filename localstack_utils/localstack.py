@@ -1,7 +1,7 @@
 import re
 import docker
 import logging
-from localstack_utils.container import Container
+from localstack_utils.container import DEV_TAG, Container
 from localstack_utils.localstack_docker_configuration import (
     LocalstackDockerConfiguration,
 )
@@ -71,7 +71,7 @@ class Localstack:
 
 def startup_localstack(
     image_name="",
-    tag="",
+    tag=DEV_TAG,
     container_name="",
     pro=False,
     ports=None,

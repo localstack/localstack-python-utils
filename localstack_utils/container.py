@@ -7,7 +7,7 @@ import docker
 from time import sleep
 
 LOCALSTACK_IMAGE_NAME = "localstack/localstack-pro"
-LATEST_TAG = "latest"
+DEV_TAG = "dev"
 
 MAX_PORT_CONNECTION_ATTEMPTS = 10
 MAX_LOG_COLLECTION_ATTEMPTS = 120
@@ -29,7 +29,7 @@ class Container:
         *args,
         pull_new_image: bool = False,
         image_name: str = LOCALSTACK_IMAGE_NAME,
-        image_tag: str = LATEST_TAG,
+        image_tag: str = DEV_TAG,
         container_name: str = DEFAULT_CONTAINER_ID,
         gateway_listen: str = "0.0.0.0:4566",
         auto_remove: bool = False,
@@ -51,7 +51,7 @@ class Container:
         bind_ports.update({gateway_port: gateway_port})
 
         if pull_new_image or not image_exists:
-            logging.info("Pulling latest image")
+            logging.info("Pulling latest development image")
             DOCKER_CLIENT.images.pull(image_name, image_tag)
 
         return DOCKER_CLIENT.containers.run(

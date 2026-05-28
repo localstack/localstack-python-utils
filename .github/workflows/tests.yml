@@ -33,4 +33,6 @@ jobs:
         run: black --check .
 
       - name: Run tests
+        env:
+          LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_AUTH_TOKEN }}
         run: pytest tests/ -v
